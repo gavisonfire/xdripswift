@@ -27,6 +27,10 @@ platform :ios do
   desc "Build Xdrip4iOS"
   lane :build_xdrip4ios do
     setup_ci if ENV['CI']
+    # Allow match to create missing provisioning profiles instead of failing in
+    # readonly mode. Without this, a shared Match-Secrets repo that has lost the
+    # xdripswift profiles (e.g. after another app nuked certs) can never recover.
+    ENV["MATCH_READONLY"] = false.to_s
     
     update_project_team(
       path: "#{GITHUB_WORKSPACE}/xdrip.xcodeproj",
